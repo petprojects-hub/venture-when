@@ -1,11 +1,73 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * -->
-<!-- * * * * * * * to get started with your project! * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<div class="app-container">
+  <header class="app-header">
+    <h1>{{ title() }}</h1>
+    <p class="subtitle">Frontend-Backend Integration Demo</p>
+  </header>
+
+  <main class="main-content">
+    <!-- Loading State -->
+    @if (loading()) {
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Loading data from backend...</p>
+      </div>
+    }
+
+    <!-- Error State -->
+    @if (error()) {
+      <div class="error">
+        <h2>❌ Connection Error</h2>
+        <p>{{ error() }}</p>
+        <button (click)="fetchDummyData()" class="retry-btn">Retry</button>
+      </div>
+    }
+
+    <!-- Success State -->
+    @if (dummyData(); as data) {
+      <div class="success">
+        <div class="data-section">
+          <h2>📡 Backend Data Successfully Loaded!</h2>
+          <div class="data-card">
+            <h3>{{ data.title }}</h3>
+            <p class="description">{{ data.description }}</p>
+          </div>
+        </div>
+
+        <div class="data-section">
+          <h3>🚀 Features</h3>
+          <div class="features-grid">
+            @for (feature of data.features; track feature.id) {
+              <div class="feature-card">
+                <h4>{{ feature.name }}</h4>
+                <p>{{ feature.description }}</p>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="data-section">
+          <h3>🌤️ Current Weather</h3>
+          <div class="weather-card">
+            <div class="weather-location">{{ data.currentWeather.location }}</div>
+            <div class="weather-temp">{{ data.currentWeather.temperature }}°C</div>
+            <div class="weather-condition">{{ data.currentWeather.condition }}</div>
+            <div class="weather-details">
+              <span>Humidity: {{ data.currentWeather.humidity }}%</span>
+              <span>Wind: {{ data.currentWeather.windSpeed }} km/h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="data-section">
+          <h4>📅 Last Updated</h4>
+          <p class="timestamp">{{ data.timestamp | date:'medium' }}</p>
+        </div>
+      </div>
+    }
+  </main>
+</div>
+
+<router-outlet />
 
 <style>
   :host {
